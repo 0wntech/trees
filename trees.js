@@ -1,7 +1,7 @@
 const rdf = require("rdflib");
 const url = require("url");
 
-function RDFlex(url) {
+function Trees(url) {
   this.store = rdf.graph();
   this.fetcher = new rdf.Fetcher(this.store);
   this.updater = new rdf.UpdateManager(this.store);
@@ -11,9 +11,8 @@ function RDFlex(url) {
 
   const update = updateFromContext.bind(this);
 
-  this.init = initValues;
+  this.create = initValues;
   this.set = function set(subject) {
-    const context = subject.context;
     const proxy = new Proxy(subject, {
       get: function(subject, prop) {
         if (prop in subject)
@@ -33,36 +32,43 @@ function RDFlex(url) {
 }
 
 function updateFromContext(subject, prop, newValue) {
-  const prevStatements = subject.context[prop];
+  const prevStatements = Array.isArray(subject.context[prop])
+    ? subject.context[prop]
+    : [subject.context[prop]];
+
   const contextFromVal = Array.isArray(prevStatements)
     ? prevStatements[0]
     : prevStatements;
-  const newStatements = [];
+  const newStatements = formNewStatements(contextFromVal, newValue);
+
+  if (JSON.stringify(prevStatements) === JSON.stringify(newStatements))
+    return Promise.resolve(true);
+
+  return this.updater.update(prevStatements, newStatements).then(() => {
+    return true;
+  });
+}
+
+function formNewStatements(context, newValue) {
+  const result = [];
   if (Array.isArray(newValue)) {
     newValue.forEach(val => {
-      newStatements.push(getNewStatement(contextFromVal, val));
+      result.push(getNewStatement(context, val));
     });
   } else {
-    newStatements.push(getNewStatement(contextFromVal, newValue));
+    result.push(getNewStatement(context, newValue));
   }
-
-  return this.updater
-    .update(
-      prevStatements,
-      newStatements
-    )
-    .then(() => {
-      return true;
-    });
+  return result;
 }
 
 function initValues() {
   assignValues = assignValues.bind(this);
   return this.fetcher
     .load(this.url, { force: true, clearPreviousData: true })
-    .then(() => {
-      const flexObject = assignValues();
-      return flexObject;
+    .then(res => {
+      if (res.status && res.status === 200)
+        console.log("[DEBUG] -- Freshly fetched + " + this.url);
+      return assignValues();
     });
 }
 
@@ -135,6 +141,13 @@ function saveStatement(statement, context) {
 
 function getNewStatement(st, newValue) {
   const newStatement = rdf.st(st.subject, st.predicate, null, st.why);
+
+  const validTypes = ["NamedNode", "BlankNode", "Literal"];
+  if (newValue.termType && validTypes.lastIndexOf(newValue.termType) !== -1) {
+    newStatement.object = newValue;
+    return newStatement;
+  }
+
   try {
     newStatement.object = rdf.sym(newValue);
   } catch (_) {
@@ -163,4 +176,4 @@ function getSemantics(node) {
   }
 }
 
-module.exports = RDFlex;
+module.exports = Trees;

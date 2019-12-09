@@ -1,3 +1,3 @@
-const RDFlex = require("./rdflex");
+const Tree = require("./trees");
 
-module.exports = RDFlex;
+module.exports = Tree;
