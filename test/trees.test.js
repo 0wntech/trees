@@ -17,10 +17,12 @@ describe("RDFlex", () => {
     });
   });
   it("fetches ld object", () => {
-    return trees.create().then(({ me }) => {
-      const testValue = "Lala Sepp";
-      return expect(me.fn).to.deep.equal(testValue);
-    });
+    return trees
+      .create("https://lalasepp1.solid.community/profile/card#me")
+      .then(({ me }) => {
+        const testValue = "Lala Sepp";
+        return expect(me.fn).to.deep.equal(testValue);
+      });
   });
   it("can read nested nodes", () => {
     return trees.create().then(({ me }) => {
