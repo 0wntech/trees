@@ -1,3 +1,5 @@
-const Tree = require("./trees");
+import { Tree, Trees } from "./trees";
 
-module.exports = Tree;
+export { Tree, Trees };
+
+export default Trees;
