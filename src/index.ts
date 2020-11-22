@@ -1,4 +1,4 @@
-import { Tree, Trees } from "./trees";
+import { Tree, Trees } from "./client";
 
 export { Tree, Trees };
 

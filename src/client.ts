@@ -140,7 +140,6 @@ function flattenTree(tree: Tree) {
   const flattenedTree: Tree = {};
   const newBlankNodes: Record<string, rdf.BlankNode> = {};
   const getObjectValue = (subTree: Tree, key: string, flatTree: Tree) => {
-    console.log(key, subTree[key], subTree);
     if (typeof subTree[key] === "object") {
       const newBlankNode = new rdf.BlankNode(`bN-${cuid()}`);
       const [flattenedSubTree, newSubTreeBlankNodes] = flattenTree({

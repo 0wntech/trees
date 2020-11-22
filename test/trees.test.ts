@@ -50,7 +50,6 @@ describe("Trees", () => {
     const { ["#me"]: newMe } = await trees.modify({
       [testFile]: { "vcard#role": undefined },
     });
-    console.log(newMe)
     expect(newMe["vcard#role"]).to.equal(undefined);
   });
   it("can set an array of values", async () => {
