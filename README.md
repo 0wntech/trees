@@ -54,7 +54,7 @@ import rdf from "rdflib";
 
 const newRole = "Software Engineer";
 
-// trees.js
+// webql-client
 const loadAndModifyGraph = async () => {
   const meUri = "https://lalasepp.owntech.de/profile/card#me";
   const graph = new Graphs(meUri);
