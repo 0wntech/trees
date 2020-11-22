@@ -48,7 +48,7 @@
     "async": "^3.2.0",
     "jsonld": "^3.1.1",
     "n3": "^1.4.0",
-    "xmldom": "^0.3.0"
+    "xmldom": "^0.4.0"
   },
   "peerDependencies": {
     "solid-auth-cli": "^1.0.14",
