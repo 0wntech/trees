@@ -197,7 +197,7 @@ export default function RDFParser(store) {
 
   /**
    * Build our initial scope frame and parse the DOM into triples
-   * @param {DOMTree} document The DOM to parse
+   * @param {DOMGraph} document The DOM to parse
    * @param {String} base The base URL to use
    * @param {Object} why The context to which this resource belongs
    */

@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "yarn build && mocha -r ts-node/register --timeout 15000 test/*.test.ts"
+    "test": "NODE_ENV=test yarn build && mocha -r ts-node/register --timeout 15000 test/*.test.ts"
   },
   "author": "",
   "license": "ISC",

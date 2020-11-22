@@ -1,11 +1,11 @@
 ## Querying Data
 
-You can query data through accessing the properties of the created tree.
+You can query data through accessing the properties of the loadd tree.
 
 ```javascript
-const trees = new Trees("https://lalasepp.owntech.de/profile/card#me");
+const trees = new Graphs("https://lalasepp.owntech.de/profile/card#me");
 
-trees.create().then(tree => {
+trees.load().then(tree => {
   console.log(tree.me.role);
 
   //Also works for deeply nested properties
@@ -18,10 +18,10 @@ trees.create().then(tree => {
 You can use the set function that's part of the tree class to set values.
 
 ```javascript
-const trees = new Trees("https://lalasepp.owntech.de/profile/card#me");
+const trees = new Graphs("https://lalasepp.owntech.de/profile/card#me");
 const { set } = trees;
 
-trees.create().then(tree => {
+trees.load().then(tree => {
   // Pass any node to set() to get an object with setter methods for it's edges
   set(tree.me).role("Software Engineer");
 
@@ -45,16 +45,16 @@ trees.create().then(tree => {
 Reading and Updating single values (e.g. The job description of a user)
 
 ```javascript
-import Trees from "trees";
+import Graphs from "trees";
 import rdf from "rdflib";
 
 const newRole = "Software Engineer";
 
 // trees.js
-const createAndModifyTree = async () => {
-  const trees = new Trees("https://lalasepp.owntech.de/profile/card#me");
+const loadAndModifyGraph = async () => {
+  const trees = new Graphs("https://lalasepp.owntech.de/profile/card#me");
 
-  const { me } = await trees.create();
+  const { me } = await trees.load();
   console.log(me.role);
 
   const { set } = trees;
@@ -62,7 +62,7 @@ const createAndModifyTree = async () => {
 };
 
 // rdflib.js
-const createAndModifyStore = async () => {
+const loadAndModifyStore = async () => {
   const store = rdf.graph();
   const fetcher = new rdf.Fetcher();
   const updater = new rdf.UpdateManager();

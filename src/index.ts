@@ -1,5 +1,5 @@
-import { Tree, Trees } from "./client";
+import { Graph, Graphs } from "./client";
 
-export { Tree, Trees };
+export { Graph, Graphs };
 
-export default Trees;
+export default Graphs;

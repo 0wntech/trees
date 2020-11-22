@@ -3,7 +3,7 @@ import cuid from "cuid";
 import * as urlUtils from "url";
 import ns from "own-namespace";
 
-export interface Tree {
+export interface Graph {
   [key: string]: any;
 }
 
@@ -11,15 +11,15 @@ const namespaceUris = Object.values(ns()).map((namespace) =>
   (namespace as Function)()
 );
 
-export class Trees {
+export class Graphs {
   store: rdf.Store;
   fetcher: rdf.Fetcher;
   updater: rdf.UpdateManager;
   url: string;
-  tree: Tree | undefined;
-  create: (this: Trees) => Promise<Tree>;
-  assignValues: (this: Trees) => Tree;
-  modify: (this: Trees, tree: Tree) => Promise<Tree>;
+  tree: Graph | undefined;
+  load: (this: Graphs) => Promise<Graph>;
+  assignValues: (this: Graphs) => Graph;
+  patch: (this: Graphs, tree: Graph) => Promise<Graph>;
 
   constructor(url: string) {
     this.store = rdf.graph();
@@ -28,9 +28,9 @@ export class Trees {
 
     this.url = url;
 
-    this.create = fetchAndAssign;
+    this.load = fetchAndAssign;
     this.assignValues = assignValues;
-    this.modify = modify;
+    this.patch = patch;
   }
 }
 
@@ -75,12 +75,12 @@ function getPreviousStatement(
   }, [] as rdf.Statement[]);
 }
 
-function modify(this: Trees, tree: Tree) {
-  const [flattenedTree, newBlankNodes] = flattenTree(tree);
+function patch(this: Graphs, tree: Graph) {
+  const [flattenedGraph, newBlankNodes] = flattenGraph(tree);
   let del: rdf.Statement[] = [];
   let ins: rdf.Statement[] = [];
-  Object.keys(flattenedTree).forEach((subject) => {
-    const propertiesToChange = Object.keys(flattenedTree[subject]);
+  Object.keys(flattenedGraph).forEach((subject) => {
+    const propertiesToChange = Object.keys(flattenedGraph[subject]);
     propertiesToChange.forEach((prop) => {
       const subjectNode = ((subject) => {
         if (subject.startsWith("bN-")) {
@@ -91,7 +91,7 @@ function modify(this: Trees, tree: Tree) {
         }
       })(subject);
       const predicateNode = rdf.sym(replacePrefixWithNamespace(prop, this.url));
-      const newValue = flattenedTree[subject][prop];
+      const newValue = flattenedGraph[subject][prop];
       const newStatements: rdf.Statement[] = newValue
         ? formNewStatements(
             rdf.st(
@@ -129,40 +129,40 @@ function modify(this: Trees, tree: Tree) {
     uniquePrevStatements,
     uniqueNewStatements,
     undefined,
-    { force: true }
+    process.env.NODE_ENV === "test" ? { force: true } : undefined
   ) as Promise<any>).then(() => {
-    const newTree = this.assignValues();
-    return newTree;
+    const newGraph = this.assignValues();
+    return newGraph;
   });
 }
 
-function flattenTree(tree: Tree) {
-  const flattenedTree: Tree = {};
+function flattenGraph(tree: Graph) {
+  const flattenedGraph: Graph = {};
   const newBlankNodes: Record<string, rdf.BlankNode> = {};
-  const getObjectValue = (subTree: Tree, key: string, flatTree: Tree) => {
-    if (typeof subTree[key] === "object") {
+  const getObjectValue = (subGraph: Graph, key: string, flatGraph: Graph) => {
+    if (typeof subGraph[key] === "object") {
       const newBlankNode = new rdf.BlankNode(`bN-${cuid()}`);
-      const [flattenedSubTree, newSubTreeBlankNodes] = flattenTree({
-        [newBlankNode.value]: subTree[key],
+      const [flattenedSubGraph, newSubGraphBlankNodes] = flattenGraph({
+        [newBlankNode.value]: subGraph[key],
       });
-      Object.keys(flattenedSubTree).forEach(
-        (_, index, flattenedSubTreeKeys) => {
-          flatTree[flattenedSubTreeKeys[index]] =
-            flattenedSubTree[flattenedSubTreeKeys[index]];
-          newBlankNodes[Object.keys(newSubTreeBlankNodes)[index]] =
-            newSubTreeBlankNodes[Object.keys(newSubTreeBlankNodes)[index]];
+      Object.keys(flattenedSubGraph).forEach(
+        (_, index, flattenedSubGraphKeys) => {
+          flatGraph[flattenedSubGraphKeys[index]] =
+            flattenedSubGraph[flattenedSubGraphKeys[index]];
+          newBlankNodes[Object.keys(newSubGraphBlankNodes)[index]] =
+            newSubGraphBlankNodes[Object.keys(newSubGraphBlankNodes)[index]];
         }
       );
       newBlankNodes[newBlankNode.value] = newBlankNode;
       return newBlankNode;
-    } else if (subTree[key]) {
-      return subTree[key];
+    } else if (subGraph[key]) {
+      return subGraph[key];
     }
   };
   Object.keys(tree).forEach((subject) => {
     Object.keys(tree[subject]).forEach((key) => {
-      flattenedTree[subject] = {
-        ...flattenedTree[subject],
+      flattenedGraph[subject] = {
+        ...flattenedGraph[subject],
         [key]: Array.isArray(tree[subject][key])
           ? tree[subject][key].map((value: any) =>
               getObjectValue(
@@ -171,14 +171,14 @@ function flattenTree(tree: Tree) {
                   [key]: value,
                 },
                 key,
-                flattenedTree
+                flattenedGraph
               )
             )
-          : getObjectValue(tree[subject], key, flattenedTree),
+          : getObjectValue(tree[subject], key, flattenedGraph),
       };
     });
   });
-  return [flattenedTree, newBlankNodes];
+  return [flattenedGraph, newBlankNodes];
 }
 
 function formNewStatements(
@@ -198,7 +198,7 @@ function formNewStatements(
   return result;
 }
 
-async function fetchAndAssign(this: Trees) {
+async function fetchAndAssign(this: Graphs) {
   return await this.fetcher._fetch(this.url).then(async (res: Response) => {
     if (res.status && res.status === 200) {
       const body = await res.text();
@@ -253,7 +253,7 @@ function replacePrefixWithNamespace(prefixedProp: string, baseUrl: string) {
   return ns()[namespacePrefix](prop);
 }
 
-function assignValues(this: Trees) {
+function assignValues(this: Graphs) {
   const store = this.store;
   const statements = store.statementsMatching(
     null,
@@ -261,7 +261,7 @@ function assignValues(this: Trees) {
     null,
     rdf.sym(this.url)
   );
-  const tree: Tree = {};
+  const tree: Graph = {};
 
   //Looping through statements
   for (const index in statements) {
@@ -281,7 +281,7 @@ function assignValues(this: Trees) {
       statement.subject,
       this.url
     ) as string;
-    const subTree: Tree = { id: statement.subject.value };
+    const subGraph: Graph = { id: statement.subject.value };
 
     //Looping through predicates
     store
@@ -315,10 +315,10 @@ function assignValues(this: Trees) {
           });
 
         // Save objects in predicate property
-        subTree[predicate] = values.length > 1 ? values : values[0];
+        subGraph[predicate] = values.length > 1 ? values : values[0];
       });
 
-    const proxy = createProxy(subTree);
+    const proxy = createProxy(subGraph);
     tree[shortSubject] = proxy;
   }
 
@@ -326,11 +326,11 @@ function assignValues(this: Trees) {
   return tree;
 }
 
-function createProxy(subTree: Tree) {
-  return new Proxy(subTree, {
-    get: function (subTree, prop) {
-      if (typeof prop === "string" && subTree[prop]) {
-        return subTree[prop];
+function createProxy(subGraph: Graph) {
+  return new Proxy(subGraph, {
+    get: function (subGraph, prop) {
+      if (typeof prop === "string" && subGraph[prop]) {
+        return subGraph[prop];
       }
     },
   });
@@ -360,4 +360,4 @@ function getNewStatement(
   return newStatement;
 }
 
-export default Trees;
+export default Graphs;

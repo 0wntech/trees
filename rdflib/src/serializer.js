@@ -345,27 +345,27 @@ export default (function () {
 
     // //////////////////////////////////////////// Structure for N3
     // Convert a set of statements into a nested tree of lists and strings
-    function statementListToTreeMethod (statements) {
+    function statementListToGraphMethod (statements) {
       var stats = this.rootSubjects(statements)
       var roots = stats.roots
       var results = []
       for (var i = 0; i < roots.length; i++) {
         var root = roots[i]
-        results.push(subjectTree(root, stats))
+        results.push(subjectGraph(root, stats))
       }
       return results
     }
-    var statementListToTree = statementListToTreeMethod.bind(this)
+    var statementListToGraph = statementListToGraphMethod.bind(this)
 
     // The tree for a subject
-    function subjectTree (subject, stats) {
+    function subjectGraph (subject, stats) {
       if (subject.termType === 'BlankNode' && !stats.incoming[subject]) {
-        return objectTree(subject, stats, true).concat(['.']) // Anonymous bnode subject
+        return objectGraph(subject, stats, true).concat(['.']) // Anonymous bnode subject
       }
-      return [ termToN3(subject, stats) ].concat([propertyTree(subject, stats)]).concat(['.'])
+      return [ termToN3(subject, stats) ].concat([propertyGraph(subject, stats)]).concat(['.'])
     }
     // The property tree for a single subject or anonymous node
-    function propertyTreeMethod (subject, stats) {
+    function propertyGraphMethod (subject, stats) {
       var results = []
       var lastPred = null
       var sts = stats.subjects[this.toStr(subject)] || [] // relevant statements
@@ -387,38 +387,38 @@ export default (function () {
             ? predMap[st.predicate.uri] : termToN3(st.predicate, stats))
         }
         lastPred = st.predicate.uri
-        objects.push(objectTree(st.object, stats))
+        objects.push(objectGraph(st.object, stats))
       }
       results = results.concat([objects])
       return results
     }
-    var propertyTree = propertyTreeMethod.bind(this)
+    var propertyGraph = propertyGraphMethod.bind(this)
 
-    function objectTreeMethod (obj, stats, force) {
+    function objectGraphMethod (obj, stats, force) {
       if (obj.termType === 'BlankNode' &&
         (force || stats.rootsHash[obj.toNT()] === undefined)) {// if not a root
         if (stats.subjects[this.toStr(obj)]) {
-          return ['[', propertyTree(obj, stats), ']']
+          return ['[', propertyGraph(obj, stats), ']']
         } else {
           return '[]'
         }
       }
       return termToN3(obj, stats)
     }
-    var objectTree = objectTreeMethod.bind(this)
+    var objectGraph = objectGraphMethod.bind(this)
 
     function termToN3Method (expr, stats) { //
       var i, res
       switch (expr.termType) {
         case 'Graph':
           res = ['{']
-          res = res.concat(statementListToTree(expr.statements))
+          res = res.concat(statementListToGraph(expr.statements))
           return res.concat(['}'])
 
         case 'Collection':
           res = ['(']
           for (i = 0; i < expr.elements.length; i++) {
-            res.push([ objectTree(expr.elements[i], stats) ])
+            res.push([ objectGraph(expr.elements[i], stats) ])
           }
           res.push(')')
           return res
@@ -445,7 +445,7 @@ export default (function () {
     }
     var prefixDirectives = prefixDirectivesMethod.bind(this)
     // Body of statementsToN3:
-    var tree = statementListToTree(sts)
+    var tree = statementListToGraph(sts)
     return prefixDirectives() + treeToString(tree)
   }
   // //////////////////////////////////////////// Atomic Terms
@@ -724,18 +724,18 @@ export default (function () {
       return str
     }
 
-    function statementListToXMLTreeMethod (statements) {
+    function statementListToXMLGraphMethod (statements) {
       this.suggestPrefix('rdf', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#')
       var stats = this.rootSubjects(statements)
       var roots = stats.roots
       var results = []
       for (var i = 0; i < roots.length; i++) {
         var root = roots[i]
-        results.push(subjectXMLTree(root, stats))
+        results.push(subjectXMLGraph(root, stats))
       }
       return results
     }
-    var statementListToXMLTree = statementListToXMLTreeMethod.bind(this)
+    var statementListToXMLGraph = statementListToXMLGraphMethod.bind(this)
 
     function escapeForXML (str) {
       if (typeof str === 'undefined') return '@@@undefined@@@@'
@@ -757,12 +757,12 @@ export default (function () {
     var relURI = relURIMethod.bind(this)
 
     // The tree for a subject
-    function subjectXMLTreeMethod (subject, stats) {
+    function subjectXMLGraphMethod (subject, stats) {
       var results = []
       var type, t, st, pred
       var sts = stats.subjects[this.toStr(subject)] // relevant statements
       if (typeof sts === 'undefined') { // empty bnode
-        return propertyXMLTree(subject, stats)
+        return propertyXMLGraph(subject, stats)
       }
 
       // Sort only on the predicate, leave the order at object
@@ -817,7 +817,7 @@ export default (function () {
           case 'BlankNode':
             if (stats.incoming[st.object].length === 1) { // there should always be something in the incoming array for a bnode
               results = results.concat(['<' + t + ' rdf:parseType="Resource">',
-                subjectXMLTree(st.object, stats),
+                subjectXMLGraph(st.object, stats),
                 '</' + t + '>'])
             } else {
               results = results.concat(['<' + t + ' rdf:nodeID="' +
@@ -839,7 +839,7 @@ export default (function () {
             break
           case 'Collection':
             results = results.concat(['<' + t + ' rdf:parseType="Collection">',
-              collectionXMLTree(st.object, stats),
+              collectionXMLGraph(st.object, stats),
               '</' + t + '>'])
             break
           default:
@@ -861,18 +861,18 @@ export default (function () {
       return [ '<' + tag + attrs + '>' ].concat([results]).concat(['</' + tag + '>'])
     }
 
-    var subjectXMLTree = subjectXMLTreeMethod.bind(this)
+    var subjectXMLGraph = subjectXMLGraphMethod.bind(this)
 
-    function collectionXMLTree (subject, stats) {
+    function collectionXMLGraph (subject, stats) {
       var res = []
       for (var i = 0; i < subject.elements.length; i++) {
-        res.push(subjectXMLTree(subject.elements[i], stats))
+        res.push(subjectXMLGraph(subject.elements[i], stats))
       }
       return res
     }
 
     // The property tree for a single subject or anonymos node
-    function propertyXMLTreeMethod (subject, stats) {
+    function propertyXMLGraphMethod (subject, stats) {
       var results = []
       var sts = stats.subjects[this.toStr(subject)] // relevant statements
       if (!sts) return results // No relevant statements
@@ -886,7 +886,7 @@ export default (function () {
                 '</' + qname(st.predicate) + '>'])
             } else {
               results = results.concat(['<' + qname(st.predicate) + ' rdf:parseType="Resource">',
-                propertyXMLTree(st.object, stats),
+                propertyXMLGraph(st.object, stats),
                 '</' + qname(st.predicate) + '>'])
             }
             break
@@ -903,7 +903,7 @@ export default (function () {
             break
           case 'Collection':
             results = results.concat(['<' + qname(st.predicate) + ' rdf:parseType="Collection">',
-              collectionXMLTree(st.object, stats),
+              collectionXMLGraph(st.object, stats),
               '</' + qname(st.predicate) + '>'])
             break
           default:
@@ -912,7 +912,7 @@ export default (function () {
       }
       return results
     }
-    var propertyXMLTree = propertyXMLTreeMethod.bind(this)
+    var propertyXMLGraph = propertyXMLGraphMethod.bind(this)
 
     function qnameMethod (term) {
       var uri = term.uri
@@ -943,7 +943,7 @@ export default (function () {
 
     // Body of toXML:
 
-    var tree = statementListToXMLTree(sts)
+    var tree = statementListToXMLGraph(sts)
     var str = '<rdf:RDF'
     if (this.defaultNamespace) {
       str += ' xmlns="' + escapeForXML(this.defaultNamespace) + '"'
