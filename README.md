@@ -15,7 +15,7 @@ graph.load().then(graph => {
 
 ## Setting Data
 
-You can use the patch function that is part of the tree class to set values.
+You can use the patch function that is part of the Graph class to set values.
 
 ```javascript
 const meUri = "https://lalasepp.owntech.de/profile/card#me";
