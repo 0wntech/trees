@@ -1,6 +1,5 @@
 import { expect } from "chai";
-import { EROFS } from "constants";
-import * as rdf from "rdflib";
+import * as rdf from "../rdflib";
 const auth = require("solid-auth-cli");
 
 import { Graph, Graphs } from "../lib";

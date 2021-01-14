@@ -1,4 +1,4 @@
-import * as rdf from "rdflib";
+import * as rdf from "../rdflib";
 import cuid from "cuid";
 import * as urlUtils from "url";
 import ns from "own-namespace";
