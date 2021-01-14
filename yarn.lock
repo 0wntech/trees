@@ -23,7 +23,7 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@babel/runtime@^7.11.2", "@babel/runtime@^7.12.1":
+"@babel/runtime@^7.12.1":
   version "7.12.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.12.5.tgz#410e7e487441e1b360c29be715d870d9b985882e"
   integrity sha512-plcc+hbExy3McchJCEQG3knOsuh3HH+Prx1P6cLIkET/0dLuQDEnrT+s27Axgc9bqfsmNUNHfscgMUdBpC9xfg==
@@ -652,7 +652,7 @@ core-util-is@1.0.2:
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
-cross-fetch@3.0.6, cross-fetch@^3.0.4:
+cross-fetch@3.0.6, cross-fetch@^3.0.4, cross-fetch@^3.0.6:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-3.0.6.tgz#3a4040bc8941e653e0e9cf17f29ebcd177d3365c"
   integrity sha512-KBPUbqgFjzWlVcURG+Svp9TlhA5uliYtiNx/0r8nv0pdypeQCRJ9IaSIc3q/x3q8t3F75cHuwxVql1HFGHCNJQ==
@@ -1456,7 +1456,7 @@ jsonld@^1.4.0:
     semver "^5.6.0"
     xmldom "0.1.19"
 
-jsonld@^3.1.1:
+jsonld@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/jsonld/-/jsonld-3.2.0.tgz#be31b2ee9d5ed490d1e912263e31ca327f5a157f"
   integrity sha512-re7FofG1iklGDlAthC4u5AMMt4l3qRNQbSI0nZTJu9vJG2R0QO6/yIhh8ZIh/M9Gg+EjXsULgQV/HEsltoVZBg==
@@ -1626,10 +1626,18 @@ msrcrypto@^1.5.6:
   resolved "https://registry.yarnpkg.com/msrcrypto/-/msrcrypto-1.5.8.tgz#be419be4945bf134d8af52e9d43be7fa261f4a1c"
   integrity sha512-ujZ0TRuozHKKm6eGbKHfXef7f+esIhEckmThVnz7RNyiOJd7a6MXj2JGBoL9cnPDW+JMG16MoTUh5X+XXjI66Q==
 
-n3@^1.0.3, n3@^1.6.2:
+n3@^1.0.3:
   version "1.6.4"
   resolved "https://registry.yarnpkg.com/n3/-/n3-1.6.4.tgz#88153fdcec3b818ecf4468fecc425c6ba6b604c0"
   integrity sha512-qiiBhW2nJ59cfQzi0nvZs5tSXkXgDXedIy3zNNuKjTwE8Bcvv95DTFJpOY9geg6of5T7z6cg+ZWcaHIij3svrA==
+  dependencies:
+    queue-microtask "^1.1.2"
+    readable-stream "^3.6.0"
+
+n3@^1.6.3:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/n3/-/n3-1.7.0.tgz#618391e1685d24ff642213777156380653807405"
+  integrity sha512-8R0Qj545WnVLQxOfxxyFKzOpO13hF3jhSMJfO0FNqvbsPZDiR9ZDmGGjXAlcoZDf/88OsCYd7rHML284vm1h6A==
   dependencies:
     queue-microtask "^1.1.2"
     readable-stream "^3.6.0"
@@ -1868,15 +1876,16 @@ rdf-canonize@^1.0.2:
     node-forge "^0.10.0"
     semver "^6.3.0"
 
-rdflib@1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/rdflib/-/rdflib-1.3.2.tgz#22623d9ca6dc245ee5afe14903f88cdc8100927b"
-  integrity sha512-1DLWLFAP8KX2lTpgVHwdJFIun8VbucXWKsLNcGsXFV6U222PjHwoyZfjNa7idlpNUxogIo77FjC9EZUtW4Y8Uw==
+rdflib@1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/rdflib/-/rdflib-1.3.4.tgz#9453461fc856232bebc447729903791754da487e"
+  integrity sha512-DiA5oRDe/5C/OfiQG1LAWrSpQSHvRddSWF3hTT67SCDNH1tF4KMjbqbCGN3RRI9gqdaddixU1WqO/5YIyXpSLg==
   dependencies:
-    "@babel/runtime" "^7.11.2"
+    "@babel/runtime" "^7.12.1"
     async "^3.2.0"
-    jsonld "^3.1.1"
-    n3 "^1.6.2"
+    cross-fetch "^3.0.6"
+    jsonld "^3.2.0"
+    n3 "^1.6.3"
     xmldom "^0.3.0"
 
 react-native-securerandom@^0.1.1:
