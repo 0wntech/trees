@@ -15,7 +15,7 @@
   "dependencies": {
     "browserfs": "1.4.3",
     "cuid": "^2.1.8",
-    "own-namespace": "^0.4.4",
+    "own-namespace": "^0.4.5",
     "rdflib": "^2.1.3",
     "url": "^0.11.0"
   },
