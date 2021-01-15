@@ -1,6 +1,6 @@
 import { expect } from "chai";
-import * as rdf from "../rdflib";
-const auth = require("solid-auth-cli");
+import { SolidNodeClient } from "solid-node-client";
+const config = require("dotenv").config();
 
 import { Graph, Graphs } from "../lib";
 
@@ -9,9 +9,10 @@ const trees = new Graphs(testFile);
 
 describe("Graphs", () => {
   before("Authenticating", async () => {
-    const credentials = await auth.getCredentials();
-    await auth.login(credentials);
-    trees.fetcher = new rdf.Fetcher(trees.store, { fetch: auth.fetch });
+    const client = new SolidNodeClient();
+    console.debug(config)
+    await client.login(config);
+    trees.fetcher._fetch = client.session.fetch.bind(client);
   });
   it("fetches ld object", () => {
     return trees.load().then((tree: Graph) => {
