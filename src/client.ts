@@ -17,7 +17,10 @@ export class Graphs {
   updater: rdf.UpdateManager;
   url: string;
   tree: Graph | undefined;
-  load: (this: Graphs) => Promise<Graph>;
+  load: (
+    this: Graphs,
+    options?: { clearPreviousData?: boolean }
+  ) => Promise<Graph>;
   assignValues: (this: Graphs) => Graph;
   patch: (this: Graphs, tree: Graph) => Promise<Graph>;
 
@@ -46,14 +49,14 @@ function getPreviousStatement(
         newStatement.subject,
         newStatement.predicate,
         null,
-        rdf.sym(baseUrl)
+        rdf.sym(baseUrl).doc()
       ),
       ...store
         .statementsMatching(
           newStatement.subject,
           newStatement.predicate,
           null,
-          rdf.sym(baseUrl)
+          rdf.sym(baseUrl).doc()
         )
         .reduce(
           (allPotentialBlankNodeStatements, potentialBlankNodeStatement) => [
@@ -64,7 +67,7 @@ function getPreviousStatement(
                     potentialBlankNodeStatement.object,
                     null,
                     null,
-                    rdf.sym(baseUrl)
+                    rdf.sym(baseUrl).doc()
                   ),
                 ]
               : []),
@@ -98,7 +101,7 @@ function patch(this: Graphs, tree: Graph) {
               subjectNode,
               predicateNode,
               {} as rdf.Node,
-              rdf.sym(this.url)
+              rdf.sym(this.url).doc()
             ),
             newValue
           )
@@ -110,7 +113,7 @@ function patch(this: Graphs, tree: Graph) {
               subjectNode,
               predicateNode,
               null,
-              rdf.sym(this.url)
+              rdf.sym(this.url).doc()
             ),
             this.url,
             this.store
@@ -125,6 +128,7 @@ function patch(this: Graphs, tree: Graph) {
   const uniqueNewStatements = ins.filter(
     (newSt) => !del.find((st) => JSON.stringify(st) === JSON.stringify(newSt))
   );
+  // console.debug(uniquePrevStatements, del, ins, flattenedGraph);
   return (this.updater.update(
     uniquePrevStatements,
     uniqueNewStatements,
@@ -197,14 +201,11 @@ function formNewStatements(
   return result;
 }
 
-async function fetchAndAssign(this: Graphs) {
-  return await this.fetcher._fetch(this.url).then(async (res: Response) => {
-    if (res.status && res.status === 200) {
-      const body = await res.text();
-      const contentType = res.headers.get("Content-Type") ?? "text/turtle";
-      rdf.parse(body, this.store, this.url, contentType);
-      console.log("[DEBUG] -- Freshly fetched + " + this.url);
-    }
+async function fetchAndAssign(
+  this: Graphs,
+  options?: { clearPreviousData?: boolean }
+) {
+  return await this.fetcher.load(this.url, options).then(async () => {
     return this.assignValues();
   });
 }
@@ -258,7 +259,7 @@ function assignValues(this: Graphs) {
     null,
     null,
     null,
-    rdf.sym(this.url)
+    rdf.sym(this.url).doc()
   );
   const tree: Graph = {};
 
@@ -284,7 +285,12 @@ function assignValues(this: Graphs) {
 
     //Looping through predicates
     store
-      .statementsMatching(statement.subject, null, null, rdf.sym(this.url))
+      .statementsMatching(
+        statement.subject,
+        null,
+        null,
+        rdf.sym(this.url).doc()
+      )
       .forEach((subjectStatement: rdf.Statement) => {
         const predicate = replaceNamespaceWithPrefix(
           subjectStatement.predicate,
@@ -297,7 +303,7 @@ function assignValues(this: Graphs) {
             statement.subject,
             subjectStatement.predicate,
             null,
-            rdf.sym(this.url)
+            rdf.sym(this.url).doc()
           )
           .map((object: rdf.Node) => {
             const shortObject = replaceNamespaceWithPrefix(
