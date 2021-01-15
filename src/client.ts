@@ -128,8 +128,7 @@ function patch(this: Graphs, tree: Graph) {
   return (this.updater.update(
     uniquePrevStatements,
     uniqueNewStatements,
-    undefined,
-    process.env.NODE_ENV === "test" ? { force: true } : undefined
+    undefined
   ) as Promise<any>).then(() => {
     const newGraph = this.assignValues();
     return newGraph;

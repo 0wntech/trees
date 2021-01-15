@@ -10,7 +10,6 @@ const trees = new Graphs(testFile);
 describe("Graphs", () => {
   before("Authenticating", async () => {
     const client = new SolidNodeClient();
-    console.debug(config)
     await client.login(config);
     trees.fetcher._fetch = client.session.fetch.bind(client);
   });
