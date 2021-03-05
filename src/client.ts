@@ -250,6 +250,13 @@ function replacePrefixWithNamespace(prefixedProp: string, baseUrl: string) {
   const propFragments = prefixedProp.split("#");
   const namespacePrefix = propFragments[0];
   const prop = propFragments[1];
+  if (!Object.keys(ns()).includes(namespacePrefix)) {
+    throw Error(
+      "Couldn't find a namespace url for the prefix: " +
+        namespacePrefix +
+        ". Did you forget to declare your custom namespace in own-namespaces.json?"
+    );
+  }
   return ns()[namespacePrefix](prop);
 }
 

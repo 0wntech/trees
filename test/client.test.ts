@@ -1,5 +1,4 @@
 import { expect } from "chai";
-import * as rdf from "rdflib";
 import { SolidNodeClient } from "solid-node-client";
 const config = require("dotenv").config();
 
