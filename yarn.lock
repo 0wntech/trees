@@ -72,15 +72,37 @@
   resolved "https://registry.yarnpkg.com/@panva/asn1.js/-/asn1.js-1.0.0.tgz#dd55ae7b8129e02049f009408b97c61ccf9032f6"
   integrity sha512-UdkG3mLEqXgnlKsWanWcgb6dOjUzJ+XC5f+aWw30qrtjxeNUSfKX1cd5FBzOaXQumoe9nIqeZUvrRJS03HCCtw==
 
+"@solid-rest/core@^2.0.6":
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/@solid-rest/core/-/core-2.0.6.tgz#857624c0736e66eb139c2dc1548f5092f66a03ab"
+  integrity sha512-FfKEg5C1jn5blCpQ+2tsozJoyvjO8UuL3xfPnFGWuwdypQV9s0KNQrvzMZ+U5s+sEWnBSiy1JWBqXO2ivLD/Hw==
+  dependencies:
+    cross-fetch "3.0.6"
+    mime-types "2.1.27"
+    uuid "8.3.1"
+
+"@solid-rest/file@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@solid-rest/file/-/file-2.0.7.tgz#5232cc9a7143995e26d5f1b282e0e558882b2b3c"
+  integrity sha512-awsZxEJz6Z1PxuWAIjyC7wCYxX41AmauFk7Om5tK4t7u92tAxeXlEJVIlYBpeXRhQoG6dNEhuPWxjHllZk76Iw==
+  dependencies:
+    "@solid-rest/core" "^2.0.6"
+    concat-stream "^2.0.0"
+    fs-extra "^9.0.1"
+    mime-types "^2.1.27"
+    stream "0.0.2"
+
 "@types/chai@^4.2.14":
   version "4.2.14"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.2.14.tgz#44d2dd0b5de6185089375d976b4ec5caf6861193"
   integrity sha512-G+ITQPXkwTrslfG5L/BksmbLUA0M1iybEsmCWPqzSxsRRhJZimBKJkoMi8fr/CPygPTj4zO5pJH7I2/cm9M7SQ==
 
-"@types/form-urlencoded@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@types/form-urlencoded/-/form-urlencoded-2.0.1.tgz#5c7789aca2681564116c3d278359232527e14ba1"
-  integrity sha512-Kz3LwezuNvsQF8ZcswMv4b5ZhKmjTkH2Rxle6l/520Npvaxho6b4HN9lStp6HhGrZsL/rwJHpWK9vM1RA7uZbw==
+"@types/form-urlencoded@^4.0.4":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@types/form-urlencoded/-/form-urlencoded-4.4.0.tgz#d13ad026b189f239a35614b3338247afde605eaa"
+  integrity sha512-HgXuKd4MX4L6dl+cIRYnPQPPLBxcIQwktT7DnqatIR9LKDdXQlwH0euOpJ08HUoEFZa5/nb93+EK80Py4Napug==
+  dependencies:
+    form-urlencoded "*"
 
 "@types/jjv@^1.0.29":
   version "1.0.29"
@@ -611,7 +633,7 @@ concat-map@0.0.1:
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
-concat-stream@2.0.0:
+concat-stream@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-2.0.0.tgz#414cf5af790a48c60ab9be4527d56d5e41133cb1"
   integrity sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==
@@ -686,7 +708,7 @@ debug@^3.1.0:
   dependencies:
     ms "^2.1.1"
 
-debug@^4.0.1, debug@^4.1.1, debug@^4.2.0:
+debug@^4.0.1, debug@^4.1.1, debug@^4.2.0, debug@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
   integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
@@ -783,6 +805,11 @@ ecdsa-sig-formatter@1.0.11:
   integrity sha512-nagl3RYrbNv6kQkeJIpt6NJZy8twLB/2vtz6yN9Z4vRKHN4/QZJIEbqohALSgwKdnksuY3k5Addp5lg8sVoVcQ==
   dependencies:
     safe-buffer "^5.0.1"
+
+emitter-component@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/emitter-component/-/emitter-component-1.1.1.tgz#065e2dbed6959bf470679edabeaf7981d1003ab6"
+  integrity sha1-Bl4tvtaVm/RwZ57avq95gdEAOrY=
 
 emoji-regex@^7.0.1:
   version "7.0.3"
@@ -1128,20 +1155,20 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-form-urlencoded@^4.1.4:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-4.2.1.tgz#264d0b4524a87332e94f606237493fb5d26dcd84"
-  integrity sha512-0eFJroOH2qaqc/630d4YZpmsyKmh6sfq/1z3YMXvFab0O6teGnf8640C7gufikwbQJFaC6nPlG4d/GiYVN+Dcw==
+form-urlencoded@*, form-urlencoded@^6.0.4:
+  version "6.0.4"
+  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-6.0.4.tgz#62305ea704bb86e1c8b946d1aae5a34e02b6634f"
+  integrity sha512-39GnqmnZkThJBXiKhBCrBGPKiwFHDgi3lcGO3SfURjXoz9x8quxNRTiIWViYN+QzQXxxl/uyKm+i+0PCj7Aqbw==
 
-fs-extra@9.0.1:
-  version "9.0.1"
-  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.0.1.tgz#910da0062437ba4c39fedd863f1675ccfefcb9fc"
-  integrity sha512-h2iAoN838FqAFJY2/qVpzFXy+EBxfVE220PalAqQLDVsFOHLJrZvut5puAbCdNv6WJk+B8ihI+k0c7JK5erwqQ==
+fs-extra@^9.0.1:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/fs-extra/-/fs-extra-9.1.0.tgz#5954460c764a8da2094ba3554bf839e6b9a7c86d"
+  integrity sha512-hcg3ZmepS30/7BSFqRvoo3DOMQu7IjqxO5nCDt+zM9XWjb33Wg7ziNT+Qvqbuc3+gWpzO02JubVyk2G4Zvo1OQ==
   dependencies:
     at-least-node "^1.0.0"
     graceful-fs "^4.2.0"
     jsonfile "^6.0.1"
-    universalify "^1.0.0"
+    universalify "^2.0.0"
 
 fs.realpath@^1.0.0:
   version "1.0.0"
@@ -1858,6 +1885,11 @@ mime-db@1.45.0:
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.45.0.tgz#cceeda21ccd7c3a745eba2decd55d4b73e7879ea"
   integrity sha512-CkqLUxUk15hofLoLyljJSrukZi8mAtgd+yE5uO4tqRZsdsAJKv0O+rFMhVDRJgozy+yG6md5KwuXhD4ocIoP+w==
 
+mime-db@1.48.0:
+  version "1.48.0"
+  resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.48.0.tgz#e35b31045dd7eada3aaad537ed88a33afbef2d1d"
+  integrity sha512-FM3QwxV+TnZYQ2aRqhlKBMHxk10lTbMt3bBkMAp54ddrNeVSfcQYOOKuGuy3Ddrm38I04If834fOUSq1yzslJQ==
+
 mime-types@2.1.27:
   version "2.1.27"
   resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.27.tgz#47949f98e279ea53119f5722e0f34e529bec009f"
@@ -1871,6 +1903,13 @@ mime-types@^2.1.12, mime-types@~2.1.19:
   integrity sha512-0TO2yJ5YHYr7M2zzT7gDU1tbwHxEUWBCLt0lscSNpcdAfFyJOVEpRYNS7EXVcTLNj/25QO8gulHC5JtTzSE2UQ==
   dependencies:
     mime-db "1.45.0"
+
+mime-types@^2.1.27:
+  version "2.1.31"
+  resolved "https://registry.yarnpkg.com/mime-types/-/mime-types-2.1.31.tgz#a00d76b74317c61f9c2db2218b8e9f8e9c5c9e6b"
+  integrity sha512-XGZnNzm3QvgKxa8dpzyhFTHmpP3l5YNusmne07VUOXxou9CqUqYa/HBy124RqtVh/O2pECas/MOcsDgpilPOPg==
+  dependencies:
+    mime-db "1.48.0"
 
 mimic-fn@^2.1.0:
   version "2.1.0"
@@ -2608,12 +2647,12 @@ slide@~1.1.3:
   resolved "https://registry.yarnpkg.com/slide/-/slide-1.1.6.tgz#56eb027d65b4d2dce6cb2e2d32c4d4afc9e1d707"
   integrity sha1-VusCfWW00tzmyy4tMsTUr8nh1wc=
 
-solid-auth-fetcher@^1.3.5:
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/solid-auth-fetcher/-/solid-auth-fetcher-1.3.5.tgz#1408fd65856103cb53fb4a40ecffcfab067b4d59"
-  integrity sha512-YW4EKGFNX2xSbyizS+xq8RzBkbLjPJvt+BSuDIQ504pffNgxspEW0Sp0aKQpB6Amlre1fmbgwJ6iqxo+M530dQ==
+solid-auth-fetcher@^1.5.3:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/solid-auth-fetcher/-/solid-auth-fetcher-1.5.3.tgz#e637cd3b98f92870fd349576f71792e405f00e89"
+  integrity sha512-e3M+FovmyNEcKsLO65jHPKwT3N9Oh1xYoEn2bkspLaahgZZFurYlANjeDlH/Uv2IvffjxsqM11/UCSRJBPILTQ==
   dependencies:
-    "@types/form-urlencoded" "^2.0.1"
+    "@types/form-urlencoded" "^4.0.4"
     "@types/jjv" "^1.0.29"
     "@types/jsonwebtoken" "^8.5.0"
     "@types/lodash.clonedeep" "^4.5.6"
@@ -2625,8 +2664,9 @@ solid-auth-fetcher@^1.3.5:
     build-module "^1.0.7"
     cross-fetch "^3.0.5"
     crypto-random-string "^3.3.0"
+    debug "^4.3.1"
     eslint-plugin-license-header "^0.2.0"
-    form-urlencoded "^4.1.4"
+    form-urlencoded "^6.0.4"
     husky "^4.2.3"
     jose "^1.27.2"
     jsonwebtoken "^8.5.1"
@@ -2640,24 +2680,13 @@ solid-auth-fetcher@^1.3.5:
     url-parse "^1.4.7"
     uuid "^8.2.0"
 
-solid-node-client@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/solid-node-client/-/solid-node-client-1.2.4.tgz#673cc617fc553f74114e3d77c165b9d96a8b9acb"
-  integrity sha512-fzSJ3ASK0ZlJAwpSIpHUebLquEv7nqkKYlqfTmldwdjQ+5NL4eTpYbHM8i2ACtdu9XjqOPxqNhqISeMiqsp69Q==
+solid-node-client@2.0.5:
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/solid-node-client/-/solid-node-client-2.0.5.tgz#606fb4cf35cc7dc63a12f4d727854b01752c276e"
+  integrity sha512-RnNM4rpbT21DmRI8tFWg/4aAllNLsDRoiW2c4ebA5wA+zPPGd4Sc/1H38xwXxRIxbpcy3oTeDeDn9V3N7nRVBw==
   dependencies:
-    solid-auth-fetcher "^1.3.5"
-    solid-rest "^1.2.8"
-
-solid-rest@^1.2.8:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/solid-rest/-/solid-rest-1.3.1.tgz#f0d3f275a550f3ab2cbdd96a45076cf4b3508c90"
-  integrity sha512-lUojOwdSkW0/R2KqvKSSDm+S3nkhBCjzH6sQJg5kiKM6xxKXTvWAZu4KuFd34Jkt6yMXY96yc3GX3WS4o/Fivg==
-  dependencies:
-    concat-stream "2.0.0"
-    cross-fetch "3.0.6"
-    fs-extra "9.0.1"
-    mime-types "2.1.27"
-    uuid "8.3.1"
+    "@solid-rest/file" "^2.0.7"
+    solid-auth-fetcher "^1.5.3"
 
 source-map-support@^0.5.17:
   version "0.5.19"
@@ -2740,6 +2769,13 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     safer-buffer "^2.0.2"
     tweetnacl "~0.14.0"
+
+stream@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/stream/-/stream-0.0.2.tgz#7f5363f057f6592c5595f00bc80a27f5cec1f0ef"
+  integrity sha1-f1Nj8Ff2WSxVlfALyAon9c7B8O8=
+  dependencies:
+    emitter-component "^1.1.1"
 
 string-argv@0.3.1:
   version "0.3.1"
@@ -2974,11 +3010,6 @@ typescript@^4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.0.5.tgz#ae9dddfd1069f1cb5beb3ef3b2170dd7c1332389"
   integrity sha512-ywmr/VrTVCmNTJ6iV2LwIrfG1P+lv6luD8sUJs+2eI9NLGigaN+nUQc13iHqisq7bra9lnmUSYqbJvegraBOPQ==
-
-universalify@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/universalify/-/universalify-1.0.0.tgz#b61a1da173e8435b2fe3c67d29b9adf8594bd16d"
-  integrity sha512-rb6X1W158d7pRQBg5gkR8uPaSfiids68LTJQYOtEUhoJUWBdaQHsuT/EUduxXYxcrt4r5PJ4fuHW1MHT6p0qug==
 
 universalify@^2.0.0:
   version "2.0.0"
